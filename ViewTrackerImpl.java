@@ -94,10 +94,10 @@ public class ViewTrackerImpl implements ViewTracker {
     System.out.println("Looking for expired sessions...");
     for (String page : (Collection<String>)pageAdmins.keySet()) {
       HashMap admins = (HashMap)pageAdmins.get(page);
-      for (String key : (Collection<String>)admins.keySet()) {
-        Instant creation = (Instant)admins.get(key);
+      for (String admin : (Collection<String>)admins.keySet()) {
+        Instant creation = (Instant)admins.get(admin);
         if(creation.isBefore(Instant.now().minusSeconds(DELAY))){
-          listToRemove.put(key, page);
+          listToRemove.put(admin, page);
         }
       }
     }
