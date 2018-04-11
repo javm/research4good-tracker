@@ -82,6 +82,7 @@ public class ViewTrackerImpl implements ViewTracker {
   }
 
   private void removeViewTrack(String admin, String pageId) {
+    System.out.println("Removing (admin, pageId): " + "(" + admin +"," + pageId + ")");
     HashMap views = (HashMap)adminPages.get(admin);
     views.remove(pageId);
     HashMap admins = (HashMap)pageAdmins.get(pageId);
