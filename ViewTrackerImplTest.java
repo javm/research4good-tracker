@@ -27,6 +27,11 @@ public class ViewTrackerImplTest {
       System.out.println("page1: " + againAdmins);
       Collection<String> againPages = vt.getPages("admin1");
       System.out.println("admin1: " + againPages);
+      try{
+        Thread.sleep(5000);
+      } catch (Exception e){
+        System.err.println(e);
+      }
       Collection<String> page2Admins = vt.getAdmins("page2");
       System.out.println("page2: " + page2Admins);
     } )).start();
