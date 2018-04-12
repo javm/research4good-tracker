@@ -21,7 +21,6 @@ public class ViewTrackerImplTest {
     System.out.println("page2: " + page2AdminCol);
     Collection<String> admin2Pages = vt.getPages("admin2");
     System.out.println("admin2: " + admin2Pages);
-    
     (new Thread( () -> {
       try{
         Thread.sleep(25000);
