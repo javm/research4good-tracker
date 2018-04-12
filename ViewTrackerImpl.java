@@ -36,30 +36,6 @@ public class ViewTrackerImpl implements ViewTracker {
     }
   }
 
-/**
-  private void addPage (String admin, String pageId) {
-    if (adminPages.containsKey(admin)) {
-      HashMap pages = adminPages.get(admin);
-      pages.put(pageId, true);
-    } else {
-      HashMap pages = new HashMap<String, Boolean>();
-      pages.put(pageId, true);
-      adminPages.put(admin, pages);
-    }
-  }
-
-  private void addAdmin (String admin, String pageId) {
-    if(pageAdmins.containsKey(pageId)) {
-      HashMap admins = pageAdmins.get(pageId);
-      admins.put(admin, true);
-    } else {
-      HashMap admins = new HashMap<String, Boolean>();
-      admins.put(pageId, true);
-      pageAdmins.put(pageId, admins);
-    }
-  }
-*/
-
   public void trackView(String admin, String pageId) {
     this.addRelation(admin, pageId, adminPages);
     this.addRelation(pageId, admin, pageAdmins);
