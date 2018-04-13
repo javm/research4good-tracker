@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.Timer;
@@ -7,8 +7,8 @@ import java.time.Instant;
 
 public class ViewTrackerImpl implements ViewTracker {
 
-  private HashMap<String, HashMap> pageAdmins;
-  private HashMap<String, HashMap> adminPages;
+  private ConcurrentHashMap<String, ConcurrentHashMap> pageAdmins;
+  private ConcurrentHashMap<String, ConcurrentHashMap> adminPages;
   private static final int DELAY = 10;
 
   private class CheckViews extends TimerTask {
@@ -18,19 +18,19 @@ public class ViewTrackerImpl implements ViewTracker {
   }
 
   public ViewTrackerImpl () {
-    this.pageAdmins = new HashMap<String, HashMap>();
-    this.adminPages = new HashMap<String, HashMap>();
+    this.pageAdmins = new ConcurrentHashMap<String, ConcurrentHashMap>();
+    this.adminPages = new ConcurrentHashMap<String, ConcurrentHashMap>();
     Timer timer = new Timer();
     CheckViews check = new CheckViews();
     timer.scheduleAtFixedRate(check, 1000*DELAY, 1000*DELAY);
   }
 
-  private void addRelation(String k, String v, HashMap h) {
+  private void addRelation(String k, String v, ConcurrentHashMap h) {
     if(h.containsKey(k)) {
-      HashMap values = (HashMap)h.get(k);
+      ConcurrentHashMap values = (ConcurrentHashMap)h.get(k);
       values.put(v, Instant.now());
     } else {
-      HashMap values = new HashMap<String, Instant>();
+      ConcurrentHashMap values = new ConcurrentHashMap<String, Instant>();
       values.put(v, Instant.now());
       h.put(k, values);
     }
@@ -42,7 +42,7 @@ public class ViewTrackerImpl implements ViewTracker {
   }
 
   public Collection<String> getAdmins(String pageId){
-    HashMap adminsHash = (HashMap)pageAdmins.get(pageId);
+    ConcurrentHashMap adminsHash = (ConcurrentHashMap)pageAdmins.get(pageId);
     if(adminsHash == null){
       return null;
     }
@@ -50,7 +50,7 @@ public class ViewTrackerImpl implements ViewTracker {
   }
 
   public  Collection<String> getPages(String admin){
-    HashMap pagesHash = (HashMap)adminPages.get(admin);
+    ConcurrentHashMap pagesHash = (ConcurrentHashMap)adminPages.get(admin);
     if(pagesHash == null){
        return null;
      }
@@ -59,17 +59,17 @@ public class ViewTrackerImpl implements ViewTracker {
 
   private void removeViewTrack(String admin, String pageId) {
     System.out.println("Removing (admin, pageId): " + "(" + admin +"," + pageId + ")");
-    HashMap views = (HashMap)adminPages.get(admin);
+    ConcurrentHashMap views = (ConcurrentHashMap)adminPages.get(admin);
     views.remove(pageId);
-    HashMap admins = (HashMap)pageAdmins.get(pageId);
+    ConcurrentHashMap admins = (ConcurrentHashMap)pageAdmins.get(pageId);
     admins.remove(admin);
   }
 
   private void expire() {
-    HashMap listToRemove = new HashMap<String, String>();
+    ConcurrentHashMap listToRemove = new ConcurrentHashMap<String, String>();
     System.out.println("Looking for expired sessions...");
     for (String page : (Collection<String>)pageAdmins.keySet()) {
-      HashMap admins = (HashMap)pageAdmins.get(page);
+      ConcurrentHashMap admins = (ConcurrentHashMap)pageAdmins.get(page);
       for (String admin : (Collection<String>)admins.keySet()) {
         Instant creation = (Instant)admins.get(admin);
         if(creation.isBefore(Instant.now().minusSeconds(DELAY))){

@@ -37,6 +37,7 @@ public class ViewTrackerImplTest {
       } catch (Exception e){
         System.err.println(e);
       }
+      
       Collection<String> page2Admins = vt.getAdmins("page2");
       System.out.println("page2: " + page2Admins);
     } )).start();
